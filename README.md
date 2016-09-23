@@ -1,1 +1,1 @@
-# magento2-fraud-insight
+# Radial Magento2 Fraud Insight Connector
