@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Radial Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <!--<route id="adminhtml">
+            <module name="Radial_FraudInsight" before="Magento_Backend" />
+        </route>-->
+        <route id="fraudinsight" frontName="fraudinsight">
+            <module name="Radial_FraudInsight" />
+        </route>
+    </router>
+</config>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2016. Radial inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fraudinsight" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Radial Fraud Insight</label>
+            <tab>sales</tab>
+            <resource>Radial_FraudIsight::fraudinsight</resource>
+            <group id="api_setting" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Radial Fraud Insight</label>
+                <comment><![CDATA[Radial Fraud Insight supplements your existing fraud solution to deliver a real-time High, Medium, or Low risk rating for orders. <a href="http://info.radial.com/conquerfraud" target="_blank">Get Fraud Insight for Free</a>]]></comment>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enable Fraud Insight</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="store_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Store ID</label>
+                </field>
+                <field id="api_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API URL</label>
+                </field>
+                <field id="api_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="validate_api_connection" translate="button_label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <button_label>Test API Connection</button_label>
+                    <frontend_model>Radial\FraudInsight\Block\Adminhtml\System\Config\Testapiconnection</frontend_model>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>API Timeout</label>
+                    <comment>Time in milliseconds</comment>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Debug Mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <group id="response_action" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="80">
+                    <label>Response Action Settings</label>
+                    <fieldset_css>config-advanced</fieldset_css>
+                    <field id="high" translate="label" type="select" sortOrder="81" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>High</label>
+                        <source_model>Radial\FraudInsight\Model\Config\Source\ResponseAction</source_model>
+                    </field>
+                    <field id="medium" translate="label" type="select" sortOrder="82" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Medium</label>
+                        <source_model>Radial\FraudInsight\Model\Config\Source\ResponseAction</source_model>
+                    </field>
+                    <field id="low" translate="label" type="select" sortOrder="83" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Low</label>
+                        <source_model>Radial\FraudInsight\Model\Config\Source\ResponseAction</source_model>
+                    </field>
+                    <field id="unknown" translate="label" type="select" sortOrder="84" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Unknown</label>
+                        <source_model>Radial\FraudInsight\Model\Config\Source\ResponseAction</source_model>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>
