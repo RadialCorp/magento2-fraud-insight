@@ -7,27 +7,62 @@
 namespace Radial\FraudInsight\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
+use Radial\FraudInsight\Helper\Data;
 
 class SaveFraudInsightOrderObserver implements ObserverInterface
 {
+    /**
+     * @var \Radial\FraudInsight\Helper\Data
+     */
+    protected $fraudInsightData;
+
+    /**
+     * @var \Magento\Framework\Json\EncoderInterface
+     */
+    protected $jsonEncoder;
+
+    /**
+     * SaveFraudInsightOrderObserver constructor.
+     * @param \Radial\FraudInsight\Helper\Data $fraudInsightData
+     */
+    public function __construct(
+        Data $fraudInsightData
+    )
+    {
+        $this->fraudInsightData = $fraudInsightData;
+    }
+
     /**
      * Save order into radial_fraud_insight table to use it in the fraud insight scheduled job
      *
      * @param \Magento\Framework\Event\Observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
+        // check if fraud insight is enabled
+        if (!$this->fraudInsightData->isFraudInsightEnabled()) {
+            return $this;
+        }
+
+        /* process single order */
         /* @var $order Order */
         $order = $observer->getEvent()->getData('order');
-        $orderId = $order->getIncrementId();
+        if ($order !== null) {
+            $this->fraudInsightData->saveOrderForFraudInsight($order);
+            return $this;
+        }
 
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/fraud_insight_test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info($orderId);
+        /* process multi-shipping order */
+        /* @var $orders Orders */
+        $orders = (array)$observer->getEvent()->getData('orders');
+        if (!empty($orders)) {
+            foreach ($orders as $order) {
+                $this->fraudInsightData->saveOrderForFraudInsight($order);
+            }
+        }
 
         return $this;
     }
-
 }

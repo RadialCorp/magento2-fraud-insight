@@ -87,11 +87,11 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => false, 'default' => '0'],
             'Action Taken Acknowledgement'
         )->addColumn(
-            'charge_back_acknowledgement',
+            'chargeback_acknowledgement',
             Table::TYPE_SMALLINT,
             null,
             ['nullable' => false, 'default' => '0'],
-            'Charge Back Acknowledgement'
+            'Chargeback Acknowledgement'
         )->addIndex(
             $setup->getIdxName(
                 $installer->getTable('radial_fraud_insight'),
