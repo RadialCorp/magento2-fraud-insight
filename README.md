@@ -14,27 +14,27 @@ Please contact sales@radial.com to get Fraud Insight API Hostname, API Key and S
 
 ### Install using composer via command line (**_recommended_**)
 1. Login to Magento web server with a user who has permissions to write to the Magento file system.
-1. Go to Magento root directory
+2. Go to Magento root directory
 ```
 cd /var/www/magento2
 ```
-1. Disable the cache
+3. Disable the cache
 ```
 php bin/magento cache:disable
 ```
-1. Add the reference to the `git` repository
+4. Add the reference to the `git` repository
 ```
 composer config repositories vcs https://github.com/RadialCorp/magento2-fraud-insight.git
 ```
-1. Update the dependency in `composer.json`
+5. Update the dependency in `composer.json`
 ```
 composer require radial/magento2-fraud-insight:dev-master
 ```
-1. Run the setup script
+6. Run the setup script
 ```
 php bin/magento setup:upgrade
 ```
-2. Login to Magento admin panel and confirm extension is installed.
+7. Login to Magento admin panel and confirm extension is installed.
 
 ---
 Copyright &copy; 2016 Radial, Inc.
