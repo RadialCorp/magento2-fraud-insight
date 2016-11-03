@@ -14,6 +14,7 @@
             <group id="api_setting" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Radial Fraud Insight</label>
                 <comment><![CDATA[Radial Fraud Insight supplements your existing fraud solution to deliver a real-time High, Medium, or Low risk rating for orders. <a href="http://info.radial.com/conquerfraud" target="_blank">Get Fraud Insight for Free</a>]]></comment>
+                <fieldset_css>config-advanced</fieldset_css>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable Fraud Insight</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -58,6 +59,28 @@
                     <field id="unknown" translate="label" type="select" sortOrder="84" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Unknown</label>
                         <source_model>Radial\FraudInsight\Model\Config\Source\ResponseAction</source_model>
+                    </field>
+                </group>
+                <group id="cron"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
+                    <label>Cron Job Settings</label>
+                    <fieldset_css>config-advanced</fieldset_css>
+                    <comment><![CDATA[
+<pre>
+* * * * *
+| | | | |
+| | | | +---- Day of the Week   (range: 1-7, 1 standing for Monday)
+| | | +------ Month of the Year (range: 1-12)
+| | +-------- Day of the Month  (range: 1-31)
+| +---------- Hour              (range: 0-23)
++------------ Minute            (range: 0-59)
+Example: 0 0 * * * Daily at midnight
+</pre>
+                            ]]></comment>
+                    <field id="fraud_schedule" translate="label" type="text" sortOrder="91" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Fraud Insight Schedule</label>
+                    </field>
+                    <field id="feedback_schedule" translate="label" type="text" sortOrder="92" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Feedback Schedule</label>
                     </field>
                 </group>
             </group>

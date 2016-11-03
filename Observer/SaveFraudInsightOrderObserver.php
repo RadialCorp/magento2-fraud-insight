@@ -18,18 +18,12 @@ class SaveFraudInsightOrderObserver implements ObserverInterface
     protected $fraudInsightData;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    protected $jsonEncoder;
-
-    /**
      * SaveFraudInsightOrderObserver constructor.
      * @param \Radial\FraudInsight\Helper\Data $fraudInsightData
      */
     public function __construct(
         Data $fraudInsightData
-    )
-    {
+    ) {
         $this->fraudInsightData = $fraudInsightData;
     }
 
@@ -43,6 +37,7 @@ class SaveFraudInsightOrderObserver implements ObserverInterface
     {
         // check if fraud insight is enabled
         if (!$this->fraudInsightData->isFraudInsightEnabled()) {
+            $dubugData = ['Fraud Insight is enabled'];
             return $this;
         }
 

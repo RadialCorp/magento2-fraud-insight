@@ -11,4 +11,7 @@
     <event name="checkout_submit_all_after">
         <observer name="fraudinsight_save_order_after_submit" instance="Radial\FraudInsight\Observer\SaveFraudInsightOrderObserver" />
     </event>
+    <event name="paypal_express_place_order_success">
+        <observer name="fraudinsight_save_paypal_order_after_submit" instance="Radial\FraudInsight\Observer\SaveFraudInsightOrderObserver"/>
+    </event>
 </config>
