@@ -6,14 +6,13 @@
 
 namespace Radial\FraudInsight\Model\FraudInsight;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 
-class ValidateConnection
+class ValidateConnection extends \Radial\FraudInsight\Model\AbstractModel
 {
-    const RISK_INSIGHT_REQUEST = <<<EOF
+    const FRAUD_INSIGHT_REQUEST = <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <RiskInsightRequest xmlns="http://schema.gsicommerce.com/risk/insight/1.0/">
 	<PrimaryLangId>en</PrimaryLangId>
@@ -108,29 +107,25 @@ class ValidateConnection
 </RiskInsightRequest>
 EOF;
 
-    /**
-     * @var ObjectManagerInterface
-     */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
+    /** @var \Radial\FraudInsight\Helper\Data */
+    protected $_helper;
+    /** @var LoggerInterface */
+    protected $_logger;
 
     /**
-     * @var PsrLogger
-     */
-    protected $logger;
-
-    /**
-     * @param $objectManager $objectManager
-     * @param ScopeConfigInterface $scopeConfig
-     * @param LoggerInterface $logger
+     * ValidateConnection constructor.
+     * @param ObjectManagerInterface $objectManager
+     * @param \Radial\FraudInsight\Helper\Data $helper
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
-        LoggerInterface $logger
+        \Radial\FraudInsight\Helper\Data $helper
     ) {
         $this->_objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->logger = $logger;
+        $this->_helper = $helper;
+        $this->_logger = $this->_helper->getLogger();
     }
 
     public function testApiConnection($storeId, $apiUrl, $apiKey)
@@ -149,33 +144,86 @@ EOF;
             return $gatewayResponse;
         }
 
-        if (!$this->canTestApiConnection($storeId, $apiUrl, $apiKey)) {
+        if (!$this->_canTestApiConnection($storeId, $apiUrl, $apiKey)) {
             return $gatewayResponse;
         }
 
         try {
-            // @todo implement logic
-            $gatewayResponse->setIsValid(true);
+            $request = $this->_loadRequest();
+            $apiConfig = $this->_setupApiConfig($request, $this->_getNewEmptyResponse());
+            $response = $this->_sendRequest($this->_getApi($apiConfig));
 
-            if ($gatewayResponse->getIsValid()) {
+            if ($response) {
+                $this->_logger->debug($response->serialize());
+                $gatewayResponse->setIsValid(true);
                 $gatewayResponse->setRequestMessage(__('API Connection is successful.'));
             } else {
                 $gatewayResponse->setRequestMessage(__('Please enter a valid API credentials.'));
             }
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             $gatewayResponse->setIsValid(false);
-            $gatewayResponse->setRequestDate('');
-            $gatewayResponse->setRequestIdentifier('');
+            $gatewayResponse->setRequestMessage(__('API Connection failed'));
+            $logMessage = sprintf('[%s] Api Connection Error: %s', __CLASS__, $e->getMessage());
+            $this->_logger->critical($logMessage);
         }
 
         return $gatewayResponse;
     }
 
-    public function canTestApiConnection($storeId, $apiUrl, $apiKey)
+    protected function _canTestApiConnection($storeId, $apiUrl, $apiKey)
     {
         return !(
             !is_string($storeId) || !is_string($apiUrl) || !is_string($apiKey)
             || empty($storeId) || empty($apiUrl || empty($apiKey))
         );
+    }
+
+    /**
+     * Get new API config object.
+     *
+     * @param \Radial_FraudInsight_Sdk_IPayload $request
+     * @param \Radial_FraudInsight_Sdk_IPayload $response
+     * @return \Radial_FraudInsight_Sdk_IConfig
+     */
+    protected function _setupApiConfig(
+        \Radial_FraudInsight_Sdk_IPayload $request,
+        \Radial_FraudInsight_Sdk_IPayload $response
+    ) {
+        return $this->_getNewSdkInstance(
+            'Radial_FraudInsight_Sdk_Config',
+            [
+                'api_key'   => $this->_helper->getApiKey(),
+                'host'      => $this->_helper->getApiHostname(),
+                'store_id'  => $this->_helper->getStoreId(),
+                'request'   => $request,
+                'response'  => $response,
+            ]);
+    }
+
+    /**
+     * @param \Radial_FraudInsight_Sdk_IApi $api
+     * @return \Radial_FraudInsight_Sdk_IPayload
+     */
+    protected function _sendRequest(\Radial_FraudInsight_Sdk_IApi $api)
+    {
+        $response = null;
+        try {
+            $api->send();
+            $response = $api->getResponseBody();
+        } catch (\Exception $e) {
+            $logMessage = sprintf('[%s] The following error has occurred while sending request: %s', __CLASS__, $e->getMessage());
+            $this->_helper->getLogger()->warning($logMessage);
+        }
+        return $response;
+    }
+
+    /**
+     * @return \Radial_FraudInsight_Sdk_IPayload
+     */
+    protected function _loadRequest()
+    {
+        $request = $this->_getNewEmptyRequest();
+        $request->deserialize(static::FRAUD_INSIGHT_REQUEST);
+        return $request;
     }
 }

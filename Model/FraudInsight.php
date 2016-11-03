@@ -6,10 +6,9 @@
 
 namespace Radial\FraudInsight\Model;
 
-use Magento\Framework\Model\AbstractModel;
 use Radial\FraudInsight\Api\Data\FraudInsightInterface;
 
-class FraudInsight extends AbstractModel implements FraudInsightInterface
+class FraudInsight extends \Magento\Framework\Model\AbstractModel implements FraudInsightInterface
 {
     /**
      * Config path to Fraud Insight API settings
@@ -38,7 +37,7 @@ class FraudInsight extends AbstractModel implements FraudInsightInterface
      */
     public function load($id, $field = null)
     {
-        if (!is_numeric($id) && is_null($field)) {
+        if (!is_int($id) && is_null($field)) {
             $field = 'order_increment_id';
         }
 

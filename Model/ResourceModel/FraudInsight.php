@@ -8,7 +8,7 @@ namespace Radial\FraudInsight\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class FraudInsight extends  AbstractDb
+class FraudInsight extends AbstractDb
 {
     /**
      * Initialize resource model

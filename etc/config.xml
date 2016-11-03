@@ -10,6 +10,9 @@
         <fraudinsight>
             <api_setting>
                 <enabled>0</enabled>
+                <store_id />
+                <api_url />
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <timeout>3000</timeout>
                 <debug>0</debug>
                 <response_action>
@@ -18,7 +21,78 @@
                     <low>process</low>
                     <unknown>hold</unknown>
                 </response_action>
+                <cron>
+                    <fraud_check_schedule>* */3 * * *</fraud_check_schedule>
+                    <resend_feedback_schedule>* */3 * * *</resend_feedback_schedule>
+                </cron>
             </api_setting>
+            <map>
+                <card_type>
+                    <AE>AM</AE>
+                    <VI>VC</VI>
+                    <MC>MC</MC>
+                    <DI>DC</DI>
+                    <JCB>OTHER</JCB>
+                    <SM>OTHER</SM>
+                    <SO>OTHER</SO>
+                    <OT>OTHER</OT>
+                    <cashondelivery>CASH</cashondelivery>
+                    <paypal_express>PY</paypal_express>
+                    <payflow_advanced>PY</payflow_advanced>
+                    <payflow_link>PY</payflow_link>
+                    <hosted_pro>PY</hosted_pro>
+                    <verisign>PY</verisign>
+                    <paypaluk_direct>PY</paypaluk_direct>
+                    <paypaluk_express>PY</paypaluk_express>
+                    <paypal_standard>PY</paypal_standard>
+                    <paypal_direct>PY</paypal_direct>
+                    <paypal_express_bml>BL</paypal_express_bml>
+                    <free>OTHER</free>
+                    <giftcard>GC</giftcard>
+                    <checkmo>OTHER</checkmo>
+                    <ogone>OTHER</ogone>
+                    <purchaseorder>OTHER</purchaseorder>
+                    <banktransfer>OTHER</banktransfer>
+                </card_type>
+                <payment_adapter>
+                    <authorizenet>\Radial\FraudInsight\Model\Payment\Adapter\Authorizenet</authorizenet>
+                    <authorizenet_directpost>\Radial\FraudInsight\Model\Payment\Adapter\Authorizenet</authorizenet_directpost>
+                    <giftcard>\Radial\FraudInsight\Model\Payment\Adapter\Giftcard</giftcard>
+                    <checkmo>\Radial\FraudInsight\Model\Payment\Adapter\Checkmo</checkmo>
+                    <ccsave>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</ccsave>
+                    <payflow_advanced>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</payflow_advanced>
+                    <payflow_link>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</payflow_link>
+                    <hosted_pro>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</hosted_pro>
+                    <paypal_express>\Radial\FraudInsight\Model\Payment\Adapter\Paypal\Express</paypal_express>
+                    <verisign>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</verisign>
+                    <paypaluk_direct>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</paypaluk_direct>
+                    <paypaluk_express>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</paypaluk_express>
+                    <paypal_standard>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</paypal_standard>
+                    <paypal_direct>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</paypal_direct>
+                    <paypal_express_bml>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</paypal_express_bml>
+                    <pbridge>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge>
+                    <pbridge_authorizenet>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_authorizenet>
+                    <pbridge_ogone_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_ogone_direct>
+                    <pbridge_paypal_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_paypal_direct>
+                    <pbridge_paypaluk_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_paypaluk_direct>
+                    <pbridge_verisign>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_verisign>
+                    <pbridge_ogone_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_ogone_direct>
+                    <pbridge_ogone_direct_debit>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_ogone_direct_debit>
+                    <pbridge_worldpay_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_worldpay_direct>
+                    <pbridge_cybersource_soap>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_cybersource_soap>
+                    <pbridge_dibs>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_dibs>
+                    <pbridge_braintree_basic>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_braintree_basic>
+                    <pbridge_sagepay_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_sagepay_direct>
+                    <pbridge_firstdata>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_firstdata>
+                    <pbridge_eway_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_eway_direct>
+                    <pbridge_payone_gate>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_payone_gate>
+                    <pbridge_paybox_direct>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_paybox_direct>
+                    <pbridge_psigate_basic>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_psigate_basic>
+                    <pbridge_payone_debit>\Radial\FraudInsight\Model\Payment\Adapter\Pbridge</pbridge_payone_debit>
+                    <ogone>\Radial\FraudInsight\Model\Payment\Adapter\DefaultType</ogone>
+                    <purchaseorder>\Radial\FraudInsight\Model\Payment\Adapter\PurchaseOrder</purchaseorder>
+                </payment_adapter>
+            </map>
         </fraudinsight>
     </default>
 </config>

@@ -44,14 +44,14 @@ class TestApiConnection extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        //$result = $this->_validateConnection();
+        $result = $this->_validateConnection();
 
         // TODO: Implement execute() method.
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([
-            'valid' => (int)true,//$result->getIsValid(),
-            'message' => 'Success',//$result->getRequestMessage(),
+            'valid' => (int)$result->getIsValid(),
+            'message' => $result->getRequestMessage(),
         ]);
     }
 
