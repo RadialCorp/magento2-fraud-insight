@@ -23,10 +23,10 @@ class FraudCheck extends Order
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if (!$this->isValidPostRequest()) {
-            $this->messageManager->addError(__('Fraud Insight request could not be sent.'));
-            return $resultRedirect->setPath('sales/*/');
-        }
+//        if (!$this->isValidPostRequest()) {
+//            $this->messageManager->addError(__('Fraud Insight request could not be sent.'));
+//            return $resultRedirect->setPath('sales/*/');
+//        }
         $order = $this->_initOrder();
         if ($order) {
             try {

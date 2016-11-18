@@ -351,7 +351,7 @@ class FraudRequest
 	 */
 	protected function _buildLineItems(\Radial_FraudInsight_Sdk_Line_IItems $subPayloadLineItems)
 	{
-		foreach ($this->_order->getAllItems() as $orderItem) {
+		foreach ($this->_order->getAllVisibleItems() as $orderItem) {
 			$subPayloadLineItem = $subPayloadLineItems->getEmptyLineItem();
 			$this->_buildLineItem($subPayloadLineItem, $orderItem);
 			$subPayloadLineItems->offsetSet($subPayloadLineItem);
@@ -601,6 +601,7 @@ class FraudRequest
 	protected function _buildHttpHeaders(\Radial_FraudInsight_Sdk_Http_IHeaders $subPayloadHttpHeaders)
 	{
 		foreach ($this->_getHttpHeaders() as $name => $message) {
+            $message = htmlentities($message, ENT_QUOTES, 'UTF-8');
 			$subPayloadHttpHeader = $subPayloadHttpHeaders->getEmptyHttpHeader();
 			$this->_buildHttpHeader($subPayloadHttpHeader, $name, $message);
 			$subPayloadHttpHeaders->offsetSet($subPayloadHttpHeader);

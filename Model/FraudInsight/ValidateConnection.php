@@ -128,6 +128,38 @@ EOF;
         $this->_logger = $this->_helper->getLogger();
     }
 
+    /**
+     * Get new empty request payload
+     *
+     * @return \Radial_FraudInsight_Sdk_IPayload
+     */
+    protected function _getNewEmptyRequest()
+    {
+        return $this->_getNewSdkInstance('Radial_FraudInsight_Sdk_Request');
+    }
+
+    /**
+     * Get new empty response payload
+     *
+     * @return \Radial_FraudInsight_Sdk_IPayload
+     */
+    protected function _getNewEmptyResponse()
+    {
+        return $this->_getNewSdkInstance('Radial_FraudInsight_Sdk_Response');
+    }
+
+    /**
+     * Get new API object.
+     *
+     * @param \Radial_FraudInsight_Sdk_IConfig $config
+     * @return \Radial_FraudInsight_Sdk_IApi
+     * @codeCoverageIgnore
+     */
+    protected function _getApi(\Radial_FraudInsight_Sdk_IConfig $config)
+    {
+        return $this->_getNewSdkInstance('Radial_FraudInsight_Sdk_Api', $config);
+    }
+
     public function testApiConnection($storeId, $apiUrl, $apiKey)
     {
         // Default response
@@ -156,13 +188,13 @@ EOF;
             if ($response) {
                 $this->_logger->debug($response->serialize());
                 $gatewayResponse->setIsValid(true);
-                $gatewayResponse->setRequestMessage(__('API Connection is successful.'));
+                $gatewayResponse->setRequestMessage(__('API Connection Successful'));
             } else {
-                $gatewayResponse->setRequestMessage(__('Please enter a valid API credentials.'));
+                $gatewayResponse->setRequestMessage(__('Please enter a valid API credentials'));
             }
         } catch (\Exception $e) {
             $gatewayResponse->setIsValid(false);
-            $gatewayResponse->setRequestMessage(__('API Connection failed'));
+            $gatewayResponse->setRequestMessage(__('API Connection Failed'));
             $logMessage = sprintf('[%s] Api Connection Error: %s', __CLASS__, $e->getMessage());
             $this->_logger->critical($logMessage);
         }
