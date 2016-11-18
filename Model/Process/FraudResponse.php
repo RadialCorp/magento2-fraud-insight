@@ -97,7 +97,7 @@ class FraudResponse implements \Radial\FraudInsight\Model\Process\ResponseInterf
      */
 	protected function _processHoldAction()
     {
-        $message = __('The fraud insight has holded the order');
+        $message = __('Order was put on hold due to %1 response from Fraud Insight', $this->_response->getResponseReasonCode());
         $this->_order->hold();
         $this->_order->addStatusHistoryComment($message);
         $this->_order->save();

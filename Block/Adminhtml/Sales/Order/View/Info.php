@@ -47,4 +47,16 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\View\Info
         $orderIncrementId = $this->getOrder()->getIncrementId();
         return $this->_fraudInsightFactory->create()->load($orderIncrementId);
     }
+
+    /**
+     * Get the chargeback form html
+     *
+     * @return string
+     */
+    public function getChargebackFormHtml()
+    {
+        return $this->getLayout()->createBlock('Radial\FraudInsight\Block\Adminhtml\Sales\Order\View\Chargeback')
+            ->setTemplate('Radial_FraudInsight::sales/order/view/chargeback.phtml')
+            ->toHtml();
+    }
 }

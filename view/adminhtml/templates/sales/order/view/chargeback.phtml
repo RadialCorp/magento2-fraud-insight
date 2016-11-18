@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright © 2016 Radial Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div id="order_chargeback_block" class="edit-order-chargeback">
+    <?php //if ($block->canSubmitChargeback()):?>
+        <div class="order_chargeback_block" id="chargeback_form">
+
+            <div class="admin__field required">
+                <label for="chargeback_yesno" class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Chargeback Yes/No') ?></label>
+                <div class="admin__field-control">
+                    <select name="chargeback[yesno]" id="chargeback_yesno" class="admin__control-select">
+                        <?php foreach ($block->getYesNoOptions() as $_code => $_label): ?>
+                            <option value="<?php /* @escapeNotVerified */ echo $_code ?>"<?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo $_label ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin__field required">
+                <label for="chargeback_code" class="admin__field-label">
+                    <?php /* @escapeNotVerified */ echo __('Chargeback Code') ?>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text required-entry" type="text"
+                           id="chargeback_code"
+                           name="chargeback[code]"
+                           value="" />
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <label for="chargeback_description" class="admin__field-label">
+                    <?php /* @escapeNotVerified */ echo __('Chargeback Description') ?>
+                </label>
+                <div class="admin__field-control">
+                    <textarea name="chargeback[description]"
+                              rows="3"
+                              cols="5"
+                              id="chargeback_description"
+                              class="admin__control-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <label for="chargeback_comment" class="admin__field-label">
+                    <?php /* @escapeNotVerified */ echo __('Comment') ?>
+                </label>
+                <div class="admin__field-control">
+                    <textarea name="chargeback[comment]"
+                              rows="3"
+                              cols="5"
+                              id="chargeback_comment"
+                              class="admin__control-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <div class="order-fraud-insight-chargeback-actions">
+                    <?php echo $block->getChildHtml('submit_button') ?>
+                </div>
+            </div>
+        </div>
+    <?php //endif;?>
+</div>

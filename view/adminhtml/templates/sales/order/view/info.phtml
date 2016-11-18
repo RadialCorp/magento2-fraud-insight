@@ -94,16 +94,6 @@ $orderStoreDate = $block->formatDate(
                         <td><?php /* @escapeNotVerified */ echo $_order->getRemoteIp(); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($_fraudInsight->getIsRequestSent()): ?>
-                    <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('Fraud Insight Response Code') ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $_fraudInsight->getResponseCode(); ?></td>
-                    </tr>
-                    <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('Fraud Insight Response Description') ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $_fraudInsight->getResponseCodeDescription(); ?></td>
-                    </tr>
-                <?php endif; ?>
                 <?php if ($_order->getGlobalCurrencyCode() != $_order->getBaseCurrencyCode()): ?>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('%1 / %2 rate:', $_order->getGlobalCurrencyCode(), $_order->getBaseCurrencyCode()) ?></th>
@@ -161,6 +151,41 @@ $orderStoreDate = $block->formatDate(
         </div>
     </div>
 </section>
+
+<?php if ($_fraudInsight->getIsRequestSent()): ?>
+<section class="admin__page-section order-fraud-insight">
+    <div class="admin__page-section-title">
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Fraud Insight Information') ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item order-fraud-insight-response" style="float: left; width: calc(100% * 0.5 - 30px);">
+            <?php /* Fraud Insight Response */?>
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php /* @escapeNotVerified */ echo __('Fraud Insight Response') ?></span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary order-fraud-insight-response-table">
+                    <tr>
+                        <th><?php /* @escapeNotVerified */ echo __('Response Code') ?></th>
+                        <td><?php /* @escapeNotVerified */ echo $_fraudInsight->getResponseCode(); ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php /* @escapeNotVerified */ echo __('Response Code Description') ?></th>
+                        <td><?php /* @escapeNotVerified */ echo $_fraudInsight->getResponseCodeDescription(); ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="admin__page-section-item order-fraud-insight-chargeback" style="float: right; width: calc(100% * 0.5 - 30px);">
+            <?php /* Fraud Insight Chargeback */?>
+            <div class="admin__page-section-item-title">
+                <span class="title"><?php /* @escapeNotVerified */ echo __('Chargeback for this order') ?></span>
+            </div>
+            <?php echo $block->getChargebackFormHtml() ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <section class="admin__page-section order-addresses">
     <div class="admin__page-section-title">
