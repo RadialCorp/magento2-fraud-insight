@@ -19,6 +19,9 @@ class SendChargebackFeedback extends \Magento\Sales\Controller\Adminhtml\Order
         if ($order) {
             try {
                 $data = $this->getRequest()->getPost('chargeback');
+                if (!$data['has_chargeback']) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please select a chargeback.'));
+                }
                 if (empty($data['code'])) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a chargeback code.'));
                 }
@@ -27,12 +30,11 @@ class SendChargebackFeedback extends \Magento\Sales\Controller\Adminhtml\Order
                 $chargeback = $this->_objectManager->create('Radial\FraudInsight\Model\FraudInsight\Chargeback', ['data' => $data]);
                 $chargeback->sendFraudOrderChargeback($fraudInsight, $order);
 
+                $this->messageManager->addSuccess(__('Chargeback feedback has successfully submitted.'));
                 return $this->resultPageFactory->create();
-//                $response = ['error' => false, 'message' => __('We have successfully send the chargeback feedback.')];
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $response = ['error' => true, 'message' => $e->getMessage()];
             } catch (\Exception $e) {
-//                $response = ['error' => true, 'message' => $e->getMessage()];
                 $response = ['error' => true, 'message' => __('We cannot send the chargeback feedback.')];
             }
         }
