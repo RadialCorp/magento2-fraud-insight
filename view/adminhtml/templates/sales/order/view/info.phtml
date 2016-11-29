@@ -178,9 +178,6 @@ $orderStoreDate = $block->formatDate(
         </div>
         <div class="admin__page-section-item order-fraud-insight-chargeback" style="float: right; width: calc(100% * 0.5 - 30px);">
             <?php /* Fraud Insight Chargeback */?>
-            <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Chargeback for this order') ?></span>
-            </div>
             <?php echo $block->getChargebackFormHtml() ?>
         </div>
     </div>

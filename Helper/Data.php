@@ -136,7 +136,7 @@ class Data extends AbstractHelper
 
     public function getOrderSourceByArea(Order $order)
     {
-        return ($order->getRemoteIp()) ? 'DASHBOARD' : 'WEBSTORE';
+        return ($order->getRemoteIp()) ? 'WEBSTORE' : 'DASHBOARD';
     }
 
     public function getLanguageCode()
@@ -233,8 +233,9 @@ class Data extends AbstractHelper
      */
     public function getIsOrderFraudChecked($orderIncrementId)
     {
-        $fraudInsight = $this->_objectManager->create('Radial\FraudInsight\Model\FraudInsight');
-        return (bool)$fraudInsight->load($orderIncrementId)->getIsRequestSent();
+        $fraudInsight = $this->_objectManager->create('Radial\FraudInsight\Model\FraudInsight')
+            ->load($orderIncrementId);
+        return ($fraudInsight->getId()) ? $fraudInsight->getIsRequestSent() : true;
     }
 
     /**

@@ -34,11 +34,11 @@ class Chargeback extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $onclick = "submitAndReloadArea($('order_chargeback_block').parentNode, '" . $this->getSubmitUrl() . "')";
+        $onclick = "submitChargebackAndReloadArea($('order_chargeback_block').parentNode, '" . $this->getSubmitUrl() . "')";
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            ['label' => __('Submit Feedback'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
+            ['label' => __('Submit Chargeback Feedback'), 'class' => 'action-save action-secondary', 'onclick' => $onclick, 'disabled' => 'disabled']
         );
         $this->setChild('submit_button', $button);
         return parent::_prepareLayout();
@@ -55,6 +55,16 @@ class Chargeback extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check allow to send chargeback feedback
+     *
+     * @return bool
+     */
+    public function canSubmitChargeback()
+    {
+        return $this->_authorization->isAllowed('Radial_FraudInsight::send_chargeback_feedback');
+    }
+
+    /**
      * Submit URL getter
      *
      * @return string
@@ -64,11 +74,32 @@ class Chargeback extends \Magento\Backend\Block\Template
         return $this->getUrl('fraudinsight/sales_order/sendChargebackFeedback', ['order_id' => $this->getOrder()->getId()]);
     }
 
+    /**
+     * Reload Comment URL getter
+     *
+     * @return string
+     */
+    public function getReloadCommentUrl()
+    {
+        return $this->getUrl('fraudinsight/sales_order/reloadComment', ['order_id' => $this->getOrder()->getId()]);
+    }
+
     public function getYesNoOptions()
     {
         return [
             '1' => __('Yes'),
             '0' => __('No'),
         ];
+    }
+
+    /**
+     * Check if order is in state to send the chargeback feedback
+     *
+     * @return bool
+     */
+    protected function _isValidForChargeback()
+    {
+        return $this->getOrder()->getState() === \Magento\Sales\Model\Order::STATE_COMPLETE
+            || $this->getOrder()->getState() === \Magento\Sales\Model\Order::STATE_CANCELED;
     }
 }

@@ -15,6 +15,7 @@
                         <resource id="Magento_Sales::sales_order">
                             <resource id="Magento_Sales::actions">
                                 <resource id="Radial_FraudInsight::fraud_check" title="Fraud Insight Check" translate="title" sortOrder="160" />
+                                <resource id="Radial_FraudInsight::send_chargeback_feedback" title="Can Send Chargeback Feedback" translate="title" sortOrder="170" />
                             </resource>
                         </resource>
                     </resource>

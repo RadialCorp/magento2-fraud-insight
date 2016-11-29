@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="radial_fraudinsight">
         <job name="radial_fraud_insight_process_fraud" instance="Radial\FraudInsight\Cron\DetectFraudulentOrders" method="execute">
-            <schedule>*/1 * * * *</schedule>
-            <!--<config_path>fraudinsight/api_setting/cron/fraud_check_schedule</config_path>-->
+            <!--<schedule>*/5 * * * *</schedule>-->
+            <config_path>fraudinsight/api_setting/cron/fraud_check_schedule</config_path>
         </job>
         <job name="radial_fraud_insight_resend_feedback" instance="Radial\FraudInsight\Cron\ResendFraudOrderFeedback" method="execute">
-            <schedule>*/1 * * * *</schedule>
-            <!--<config_path>fraudinsight/api_setting/cron/resend_feedback_schedule</config_path>-->
+            <!--<schedule>*/5 * * * *</schedule>-->
+            <config_path>fraudinsight/api_setting/cron/resend_feedback_schedule</config_path>
         </job>
     </group>
 </config>

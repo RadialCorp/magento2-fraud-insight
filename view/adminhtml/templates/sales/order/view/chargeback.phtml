@@ -7,19 +7,21 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div id="order_chargeback_block" class="edit-order-chargeback">
-    <?php //if ($block->canSubmitChargeback()):?>
-        <div class="order_chargeback_block" id="chargeback_form">
 
-            <div class="admin__field required">
-                <label for="chargeback_yesno" class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Chargeback Yes/No') ?></label>
-                <div class="admin__field-control">
-                    <select name="chargeback[yesno]" id="chargeback_yesno" class="admin__control-select">
-                        <?php foreach ($block->getYesNoOptions() as $_code => $_label): ?>
-                            <option value="<?php /* @escapeNotVerified */ echo $_code ?>"<?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo $_label ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+<?php if ($block->canSubmitChargeback()):?>
+    <div class="admin__page-section-item-title">
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Chargeback feedback to fraud insight') ?></span>
+    </div>
+    <div id="order_chargeback_block" class="edit-order-chargeback">
+        <div class="order_chargeback_block" id="chargeback_form">
+            <div class="admin__field admin__field-option">
+                <input name="chargeback[has_chargeback]"
+                       type="checkbox"
+                       id="has_chargeback"
+                       class="admin__control-checkbox" />
+                <label class="admin__field-label" for="has_chargeback">
+                    <?php /* @escapeNotVerified */ echo __('Is this order has chargeback ?') ?>
+                </label>
             </div>
 
             <div class="admin__field required">
@@ -27,10 +29,11 @@
                     <?php /* @escapeNotVerified */ echo __('Chargeback Code') ?>
                 </label>
                 <div class="admin__field-control">
-                    <input class="admin__control-text required-entry" type="text"
+                    <input class="admin__control-text required-entry disabled" type="text"
                            id="chargeback_code"
                            name="chargeback[code]"
-                           value="" />
+                           value=""
+                           disabled="disabled" />
                 </div>
             </div>
 
@@ -43,7 +46,8 @@
                               rows="3"
                               cols="5"
                               id="chargeback_description"
-                              class="admin__control-textarea"></textarea>
+                              class="admin__control-textarea disabled"
+                              disabled="disabled"></textarea>
                 </div>
             </div>
 
@@ -56,7 +60,8 @@
                               rows="3"
                               cols="5"
                               id="chargeback_comment"
-                              class="admin__control-textarea"></textarea>
+                              class="admin__control-textarea disabled"
+                              disabled="disabled"></textarea>
                 </div>
             </div>
 
@@ -66,5 +71,79 @@
                 </div>
             </div>
         </div>
-    <?php //endif;?>
-</div>
+    </div>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+        'use strict';
+
+        var cbx = $('#has_chargeback');
+
+        cbx.on('change', function () {
+            var formElms = $(this).parent().parent().find('input[type=text], textarea, button');
+            if ($(this).prop('checked') == true) {
+                formElms.prop('disabled', false).removeClass('disabled');
+            } else {
+                formElms.prop('disabled', true).addClass('disabled');
+            }
+        });
+    });
+
+    function submitChargebackAndReloadArea(area, url) {
+        if($(area)) {
+            var fields = $(area).select('input', 'select', 'textarea');
+            var data = Form.serializeElements(fields, true);
+            url = url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true');
+            new Ajax.Request(url, {
+                parameters: $H(data),
+                loaderArea: area,
+                onSuccess: function(transport) {
+                    try {
+                        if (transport.responseText.isJSON()) {
+                            var response = transport.responseText.evalJSON()
+                            if (response.error) {
+                                alert(response.message);
+                            }
+                            if(response.ajaxExpired && response.ajaxRedirect) {
+                                setLocation(response.ajaxRedirect);
+                            }
+                        } else {
+                            $(area).update(transport.responseText);
+                            reloadCommentArea($('order_history_block'));
+                        }
+                    }
+                    catch (e) {
+                        $(area).update(transport.responseText);
+                    }
+                }
+            });
+        }
+    }
+    
+    function reloadCommentArea(area) {
+        if ($(area)) {
+            new Ajax.Request("<?php echo $block->getReloadCommentUrl() ?>", {
+                onSuccess: function(transport) {
+                    try {
+                        if (transport.responseText.isJSON()) {
+                            var response = transport.responseText.evalJSON()
+                            if (response.error) {
+                                alert(response.message);
+                            }
+                            if(response.ajaxExpired && response.ajaxRedirect) {
+                                setLocation(response.ajaxRedirect);
+                            }
+                        } else {
+                            $(area).update(transport.responseText);
+                        }
+                    }
+                    catch (e) {
+                        $(area).update(transport.responseText);
+                    }
+                }
+            });
+        }
+    }
+</script>
+<?php endif;?>

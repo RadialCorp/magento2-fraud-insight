@@ -89,7 +89,18 @@ class Chargeback
             if ($this->_helper->isDebugOn() === true) {
                 $this->_helper->getLogger()->debug($response->serialize());
             }
-            $this->_processResponse($response, $fraudInsight, $order);
+            // Add comment to the order
+            $message = __('The chargeback with following details was successfully submitted.');
+            $message .= PHP_EOL . __('Chargeback Code: %1', $this->_data['code']);
+            if (!empty($this->_data['description'])) {
+                $message .= PHP_EOL . __('Chargeback description: %1', $this->_data['description']);
+            }
+            if (!empty($this->_data['comment'])) {
+                $message .= PHP_EOL . __('Comment: %1', $this->_data['comment']);
+            }
+            $order->addStatusHistoryComment($message);
+            $order->save();
+            $this->_processResponse($response, $fraudInsight);
         }
     }
 
