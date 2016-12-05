@@ -154,6 +154,9 @@ class Chargeback
         try {
             $api->send();
             $response = $api->getResponseBody();
+        } catch (\Radial_FraudInsight_Sdk_Exception_Network_Error_Exception $e) {
+            $logMessage = sprintf('[%s] The following error has occurred while sending request: %s', __CLASS__, $e->getMessage());
+            $this->_helper->getLogger()->critical($logMessage);
         } catch (\Exception $e) {
             $logMessage = sprintf('[%s] The following error has occurred while sending request: %s', __CLASS__, $e->getMessage());
             $this->_helper->getLogger()->warning($logMessage);

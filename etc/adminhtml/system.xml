@@ -76,10 +76,10 @@
 Example: 0 0 * * * Daily at midnight
 </pre>
                             ]]></comment>
-                    <field id="fraud_schedule" translate="label" type="text" sortOrder="91" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="fraud_check_schedule" translate="label" type="text" sortOrder="91" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Fraud Insight Schedule</label>
                     </field>
-                    <field id="feedback_schedule" translate="label" type="text" sortOrder="92" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="resend_feedback_schedule" translate="label" type="text" sortOrder="92" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Feedback Schedule</label>
                     </field>
                 </group>
@@ -87,3 +87,4 @@ Example: 0 0 * * * Daily at midnight
         </section>
     </system>
 </config>
+
