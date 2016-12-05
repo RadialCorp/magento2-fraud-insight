@@ -22,8 +22,8 @@
                     <unknown>hold</unknown>
                 </response_action>
                 <cron>
-                    <fraud_check_schedule>* */3 * * *</fraud_check_schedule>
-                    <resend_feedback_schedule>* */3 * * *</resend_feedback_schedule>
+                    <fraud_check_schedule>*/5 * * * *</fraud_check_schedule>
+                    <resend_feedback_schedule>*/5 * * * *</resend_feedback_schedule>
                 </cron>
             </api_setting>
             <map>

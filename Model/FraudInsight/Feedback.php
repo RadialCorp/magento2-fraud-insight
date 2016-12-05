@@ -103,6 +103,8 @@ class Feedback
                 $this->_helper->getLogger()->debug($response->serialize());
             }
             $this->_processResponse($response, $fraudInsight, $order);
+        } else {
+            $this->_incrementFeedbackAttemptCount($fraudInsight);
         }
     }
 
@@ -155,9 +157,12 @@ class Feedback
         try {
             $api->send();
             $response = $api->getResponseBody();
+        } catch (\Radial_FraudInsight_Sdk_Exception_Network_Error_Exception $e) {
+            $logMessage = sprintf('[%s] The following error has occurred while sending request: %s', __CLASS__, $e->getMessage());
+            $this->_helper->getLogger()->critical($logMessage);
         } catch (\Exception $e) {
             $logMessage = sprintf('[%s] The following error has occurred while sending request: %s', __CLASS__, $e->getMessage());
-            $this->_helper->getLogger()->warning($logMessage);
+            $this->_helper->getLogger()->critical($logMessage);
         }
         return $response;
     }
@@ -177,5 +182,18 @@ class Feedback
                 'response'      => $response,
                 'fraudInsight'  => $fraudInsight,
             ])->process();
+    }
+
+    /**
+     * Increment the feedback sent attempt count.
+     *
+     * @param \Radial\FraudInsight\Model\FraudInsight $fraudInsight
+     * @return self
+     */
+    protected function _incrementFeedbackAttemptCount(\Radial\FraudInsight\Model\FraudInsight $fraudInsight)
+    {
+        $feedbackCount = $fraudInsight->getFeedbackAttemptCount() + 1;
+        $fraudInsight->setFeedbackAttemptCount($feedbackCount)->save();
+        return $this;
     }
 }

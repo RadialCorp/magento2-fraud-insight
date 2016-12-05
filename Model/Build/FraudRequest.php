@@ -492,7 +492,7 @@ class FraudRequest
 		$subPayloadLineItem->setLineItemId($orderItem->getId())
 			->setShipmentId($this->_getShipmentIdByItem($orderItem))
 			->setProductId($orderItem->getSku())
-			->setDescription($orderItem->getName())
+			->setDescription(htmlspecialchars($orderItem->getName(), ENT_QUOTES | ENT_XML1. 'UTF-8'))
 			->setUnitCost($orderItem->getPrice())
 			->setUnitCurrencyCode($this->_order->getBaseCurrencyCode())
 			->setQuantity((int) $orderItem->getQtyOrdered())
